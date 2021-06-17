@@ -94,8 +94,6 @@ int main() {
     srand(time(NULL));
     clear();
     std::cout << "\n\n\n-------------- Welcome to AI Checkers --------------\n";
-    std::cout << "Morehouse Data Structures & Algorithms Final Project\n";
-    std::cout << "    Developed by Malcolm Maddox and Malik Saafir\n\n\n";
     char play_again;
     do {
         playGame();
