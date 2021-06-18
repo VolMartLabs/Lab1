@@ -13,15 +13,15 @@ Board::Board(PieceType** b) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             PieceType piece = getPiece(i, j);
-            if (piece == BLACK || piece == BLACK_KING) {
+            if (piece == PieceType::BLACK || piece == PieceType::BLACK_KING) {
                 numBlack++;
-                if (piece == BLACK_KING) {
+                if (piece == PieceType::BLACK_KING) {
                     numBlackKings++;
                 }
             }
-            else if (piece == WHITE || piece == WHITE_KING) {
+            else if (piece == PieceType::WHITE || piece == PieceType::WHITE_KING) {
                 numWhite++;
-                if (piece == WHITE_KING) {
+                if (piece == PieceType::WHITE_KING) {
                     numWhiteKings++;
                 }
             }
@@ -47,12 +47,12 @@ void Board::setUpBoard() {
         if (i % 2 == 0) {
             first = 1;
         }
-        PieceType piece = EMPTY;
+        PieceType piece = PieceType::EMPTY;
         if (i <= 2) {
-            piece = WHITE;
+            piece = PieceType::WHITE;
         }
         else if (i >= 5) {
-            piece = BLACK;
+            piece = PieceType::BLACK;
         }
         for (int j = first; j < 8; j += 2) {
             board[i][j] = piece;
@@ -60,8 +60,8 @@ void Board::setUpBoard() {
     }
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (!(board[i][j] == BLACK || board[i][j] == WHITE) || (i > 2 && i < 5)) {
-                board[i][j] = EMPTY;
+            if (!(board[i][j] == PieceType::BLACK || board[i][j] == PieceType::WHITE) || (i > 2 && i < 5)) {
+                board[i][j] = PieceType::EMPTY;
             }
         }
     }
@@ -84,8 +84,8 @@ int Board::getNumWhiteKings() {
 }
 
 void Board::genAllMoves(Side side, std::vector<Move>& moves) {
-    PieceType normal = side == BLACK_SIDE ? BLACK : WHITE;
-    PieceType king = side == BLACK_SIDE ? BLACK_KING : WHITE_KING;
+    PieceType normal = side == Side::BLACK_SIDE ? PieceType::BLACK : PieceType::WHITE;
+    PieceType king = side == Side::BLACK_SIDE ? PieceType::BLACK_KING : PieceType::WHITE_KING;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             PieceType piece = getPiece(i, j);
@@ -108,25 +108,25 @@ void Board::genAllMoves(Side side, std::vector<Move>& moves) {
 
 void Board::genValidMoves(int r, int c, Side side, std::vector<Move>& moves) {
     PieceType piece = board[r][c];
-    if (piece == EMPTY) 
+    if (piece == PieceType::EMPTY) 
     {
         std::cout << "EMPTY PIECE\n";
         throw Failure();
     }
 
-    if (piece == WHITE || piece == BLACK) 
+    if (piece == PieceType::WHITE || piece == PieceType::BLACK) 
     {
-        int rowChange = piece == BLACK ? -1 : 1;
+        int rowChange = piece == PieceType::BLACK ? -1 : 1;
         int newRow = r + rowChange;
         if (newRow >= 0 && newRow < 8) 
         {
             int newCol = c + 1;
-            if (newCol < 8 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol < 8 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
             newCol = c - 1;
-            if (newCol >= 0 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol >= 0 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
@@ -136,12 +136,12 @@ void Board::genValidMoves(int r, int c, Side side, std::vector<Move>& moves) {
         int newRow = r + 1;
         if (newRow < 8) {
             int newCol = c + 1;
-            if (newCol < 8 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol < 8 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
             newCol = c - 1;
-            if (newCol >= 0 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol >= 0 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
@@ -149,12 +149,12 @@ void Board::genValidMoves(int r, int c, Side side, std::vector<Move>& moves) {
         newRow = r - 1;
         if (newRow >= 0) {
             int newCol = c + 1;
-            if (newCol < 8 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol < 8 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
             newCol = c - 1;
-            if (newCol >= 0 && getPiece(newRow, newCol) == EMPTY) 
+            if (newCol >= 0 && getPiece(newRow, newCol) == PieceType::EMPTY) 
             {
                 moves.push_back({ r, c, newRow, newCol });
             }
@@ -165,17 +165,17 @@ void Board::genValidMoves(int r, int c, Side side, std::vector<Move>& moves) {
 void Board::genValidJumpMoves(int r, int c, Side side, std::vector<Move>& moves) {
     Point start = { r, c };
     std::vector<Point> possible_moves;
-    if (side == WHITE_SIDE && getPiece(r, c) == WHITE) 
+    if (side == Side::WHITE_SIDE && getPiece(r, c) == PieceType::WHITE) 
     {
         possible_moves.push_back({ r + 2, c + 2 });
         possible_moves.push_back({ r + 2, c - 2 });
     }
-    else if (side == BLACK_SIDE && getPiece(r, c) == BLACK) 
+    else if (side == Side::BLACK_SIDE && getPiece(r, c) == PieceType::BLACK) 
     {
         possible_moves.push_back({ r - 2, c + 2 });
         possible_moves.push_back({ r - 2, c - 2 });
     }
-    else if (getPiece(r, c) == BLACK_KING || getPiece(r, c) == WHITE_KING) 
+    else if (getPiece(r, c) == PieceType::BLACK_KING || getPiece(r, c) == PieceType::WHITE_KING) 
     {
         possible_moves.push_back({ r + 2, c + 2 });
         possible_moves.push_back({ r + 2, c - 2 });
@@ -188,7 +188,7 @@ void Board::genValidJumpMoves(int r, int c, Side side, std::vector<Move>& moves)
         Point temp = possible_moves[i];
         Move m = { start, temp };
         Point mid = getMidSquare(m);
-        if (temp.row >= 0 && temp.row < 8 && temp.col >= 0 && temp.col < 8 && getPiece(temp.row, temp.col) == EMPTY && isOpponentPiece(side, getPiece(mid))) 
+        if (temp.row >= 0 && temp.row < 8 && temp.col >= 0 && temp.col < 8 && getPiece(temp.row, temp.col) == PieceType::EMPTY && isOpponentPiece(side, getPiece(mid))) 
         {
             moves.push_back(m);
         }
@@ -208,21 +208,21 @@ Point Board::getMidSquare(Move m)
 
 bool Board::isOpponentPiece(Side side, PieceType piece) 
 {
-    if (side == BLACK_SIDE) 
+    if (side == Side::BLACK_SIDE) 
     {
-        return piece == WHITE || piece == WHITE_KING;
+        return piece == PieceType::WHITE || piece == PieceType::WHITE_KING;
     }
-    return piece == BLACK || piece == BLACK_KING;
+    return piece == PieceType::BLACK || piece == PieceType::BLACK_KING;
 }
 
 bool Board::isOwnPiece(int r, int c, Side side) 
 {
     PieceType piece = getPiece(r, c);
-    if (side == BLACK_SIDE) 
+    if (side == Side::BLACK_SIDE) 
     {
-        return piece == BLACK || piece == BLACK_KING;
+        return piece == PieceType::BLACK || piece == PieceType::BLACK_KING;
     }
-    return piece == WHITE || piece == WHITE_KING;
+    return piece == PieceType::WHITE || piece == PieceType::WHITE_KING;
 }
 
 Status Board::makeMove(Move move, Side side) 
@@ -230,7 +230,7 @@ Status Board::makeMove(Move move, Side side)
     // TODO: CHECK FOR GAME OVER
     if (move.start.row == -1) 
     {
-        return GAME_OVER;
+        return Status::GAME_OVER;
     }
     Point start = move.start;
     int startRow = start.row;
@@ -239,9 +239,9 @@ Status Board::makeMove(Move move, Side side)
     int endRow = end.row;
     int endCol = end.col;
     PieceType current_piece = getPiece(startRow, startCol);
-    if (!isOwnPiece(startRow, startCol, side) || getPiece(startRow, startCol) == EMPTY) 
+    if (!isOwnPiece(startRow, startCol, side) || getPiece(startRow, startCol) == PieceType::EMPTY) 
     {
-        return FAILED_INVALID_PIECE;
+        return Status::FAILED_INVALID_PIECE;
     }
     std::vector<Move> possible_moves;
     genAllMoves(side, possible_moves);
@@ -255,51 +255,51 @@ Status Board::makeMove(Move move, Side side)
         bool jump = false;
         if (startRow + 1 == endRow || startRow - 1 == endRow) 
         {
-            board[startRow][startCol] = EMPTY;
+            board[startRow][startCol] = PieceType::EMPTY;
             board[endRow][endCol] = current_piece;
         }
         else 
         {
             jump = true;
-            board[startRow][startCol] = EMPTY;
+            board[startRow][startCol] = PieceType::EMPTY;
             board[endRow][endCol] = current_piece;
             Point middle_square = getMidSquare(move);
             PieceType middle_piece = getPiece(middle_square);
-            if (middle_piece == BLACK) 
+            if (middle_piece == PieceType::BLACK) 
             {
                 numBlack--;
             }
-            else if (middle_piece == WHITE) 
+            else if (middle_piece == PieceType::WHITE) 
             {
                 numWhite--;
             }
-            else if (middle_piece == BLACK_KING) 
+            else if (middle_piece == PieceType::BLACK_KING) 
             {
                 numBlack--;
                 numBlackKings--;
             }
-            else if (middle_piece == WHITE_KING) 
+            else if (middle_piece == PieceType::WHITE_KING) 
             {
                 numWhite--;
                 numWhiteKings--;
             }
-            board[middle_square.row][middle_square.col] = EMPTY;
+            board[middle_square.row][middle_square.col] = PieceType::EMPTY;
         }
-        if (endRow == 0 && side == BLACK_SIDE) 
+        if (endRow == 0 && side == Side::BLACK_SIDE) 
         {
-            board[endRow][endCol] = BLACK_KING;
+            board[endRow][endCol] = PieceType::BLACK_KING;
             numBlackKings++;
         }
-        else if (endRow == 7 && side == WHITE_SIDE) 
+        else if (endRow == 7 && side == Side::WHITE_SIDE) 
         {
-            board[endRow][endCol] = WHITE_KING;
+            board[endRow][endCol] = PieceType::WHITE_KING;
             numWhiteKings++;
         }
-        return COMPLETED;
+        return Status::COMPLETED;
     }
     else 
     {
-        return FAILED_INVALID_DEST;
+        return Status::FAILED_INVALID_DEST;
     }
 }
 
@@ -342,23 +342,23 @@ void Board::drawBoard()
             for (int j = 0; j < 8; j++) {
                 std::cout << "|";
                 PieceType p = board[i / 2][j];
-                if (p == BLACK) 
+                if (p == PieceType::BLACK) 
                 {
                     std::cout << "BP";
                 }
-                else if (p == BLACK_KING) 
+                else if (p == PieceType::BLACK_KING) 
                 {
                     std::cout << "BK";
                 }
-                else if (p == WHITE) 
+                else if (p == PieceType::WHITE) 
                 {
                     std::cout << "WP";
                 }
-                else if (p == WHITE_KING) 
+                else if (p == PieceType::WHITE_KING) 
                 {
                     std::cout << "WK";
                 }
-                else if (p == EMPTY) 
+                else if (p == PieceType::EMPTY) 
                 {
                     std::cout << "  ";
                 }

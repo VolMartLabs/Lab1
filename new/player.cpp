@@ -85,7 +85,7 @@ double AI::minimax(Board board, Side s, bool maximizing, int depth, int alpha, i
         for (int i = 0; i < n; i++) {
             tempBoard = *board.clone();
             Status status = tempBoard.makeMove(possible_moves[i], s);
-            if (status != COMPLETED && status != GAME_OVER) {
+            if (status != Status::COMPLETED && status != Status::GAME_OVER) {
                 continue;
             }
             int result = minimax(tempBoard, switchSide(s), !maximizing, depth - 1, alpha, beta);
@@ -101,7 +101,7 @@ double AI::minimax(Board board, Side s, bool maximizing, int depth, int alpha, i
         for (int i = 0; i < n; i++) {
             tempBoard = *board.clone();
             Status status = tempBoard.makeMove(possible_moves[i], s);
-            if (status != COMPLETED && status != GAME_OVER) {
+            if (status != Status::COMPLETED && status != Status::GAME_OVER) {
                 continue;
             }
             int result = minimax(tempBoard, switchSide(s), !maximizing, depth - 1, alpha, beta);
@@ -117,15 +117,15 @@ double AI::minimax(Board board, Side s, bool maximizing, int depth, int alpha, i
 
 double AI::getHeuristic(Board board) {
     double king_weight = 1.5;
-    if (getSide() == BLACK_SIDE) {
+    if (getSide() == Side::BLACK_SIDE) {
         return (king_weight * board.getNumBlackKings() + board.getNumBlack()) - (king_weight * board.getNumWhiteKings() + board.getNumWhite());
     }
     return (king_weight * board.getNumWhiteKings() + board.getNumWhite()) - (king_weight * board.getNumBlackKings() + board.getNumBlack());
 }
 
 Side AI::switchSide(Side side) {
-    if (side == BLACK_SIDE) {
-        return WHITE_SIDE;
+    if (side == Side::BLACK_SIDE) {
+        return Side::WHITE_SIDE;
     }
-    return BLACK_SIDE;
+    return Side::BLACK_SIDE;
 }

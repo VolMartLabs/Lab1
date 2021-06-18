@@ -13,20 +13,20 @@ void playGame()
     clear();
     if (p == 'b') 
     {
-        player = BLACK_SIDE;
-        cpu = WHITE_SIDE;
+        player = Side::BLACK_SIDE;
+        cpu = Side::WHITE_SIDE;
     }
     else if (p == 'w') 
     {
-        player = WHITE_SIDE;
-        cpu = BLACK_SIDE;
+        player = Side::WHITE_SIDE;
+        cpu = Side::BLACK_SIDE;
     }
     Player one("Player", player);
     AI two("CPU", cpu);
     bool player_turn = true;
     Board board;
-    Status msg = COMPLETED;
-    while (msg != GAME_OVER) 
+    Status msg = Status::COMPLETED;
+    while (msg != Status::GAME_OVER) 
     {
         clear();
         std::cout << "\n\n";
@@ -68,13 +68,13 @@ void playGame()
                 std::cout << "Enter your move (four space-separated integers x1 y1 x2 y2): ";
                 std::cin >> move.start.col >> move.start.row >> move.end.col >> move.end.row;
                 msg = one.makeMove(move, board);
-                if (msg == FAILED_INVALID_DEST) {
+                if (msg == Status::FAILED_INVALID_DEST) {
                     std::cout << "Invalid move\n";
                 }
-                else if (msg == FAILED_INVALID_PIECE) {
+                else if (msg == Status::FAILED_INVALID_PIECE) {
                     std::cout << "Invalid chosen piece\n";
                 }
-            } while (msg != COMPLETED && msg != GAME_OVER);
+            } while (msg != Status::COMPLETED && msg != Status::GAME_OVER);
             player_turn = !player_turn;
         }
         else 

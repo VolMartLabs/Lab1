@@ -8,7 +8,7 @@ contains enums PieceType, Side and Status
 #pragma once
 
 /**Enum contains board tile status*/
-enum PieceType
+enum class PieceType
 {	
 	/**Empty tile*/
     EMPTY, 
@@ -23,7 +23,7 @@ enum PieceType
 };
 
 /**Enum contains which side interacts*/
-enum Side
+enum class Side
 {
 	/**Black side turn*/
     BLACK_SIDE,
@@ -32,7 +32,7 @@ enum Side
 };
 
 /**Enum contains status of the game*/
-enum Status
+enum class Status
 {
 	/**Game is over*/
     COMPLETED,
